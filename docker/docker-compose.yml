@@ -4,17 +4,17 @@ services:
   redis:
     image: redis:latest
     container_name: redis_crawl
-    hostname: redis_crawl
+    hostname: redis.crawl
     restart: on-failure
     networks:
       - crawl
     expose:
-      - "${REDIS_HOST_PORT}"
+      - ${REDIS_HOST_PORT}
     volumes:
       - ${REDIS_LOG_DIR}:/var/log/redis/:rw
   postgres:
     image: crawl_psql
-    hostname: crawl_db
+    hostname: ${POSTGRES_DB_HOST}
     build:
       context: ./postgres
       dockerfile: Dockerfile
@@ -23,11 +23,38 @@ services:
       - ./volumes/postgres/data:/var/lib/postgresql/data
     networks:
       - crawl
+    expose:
+      - ${POSTGRES_PORT}
     environment:
       - POSTGRES_DB=${POSTGRES_DEFAULT_DB}
       - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=${POSTGRES_DB_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+  py_scheduler:
+    image: python:latest
+    build:
+      context: ./py_scheduler
+      dockerfile:
+      args:
+    restart: on-failure
+    hostname: scheduler.crawl
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - POSTGRES_DB=${POSTGRES_DEFAULT_DB}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_DB_HOST}
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+    volumes:
+      - ./log/scheduler:/var/www/data_crawler/log
+    networks:
+      - crawl
+    depends_on:
+      - redis
+      - postgres
 
 networks:
   crawl:
