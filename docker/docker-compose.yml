@@ -1,0 +1,16 @@
+version: "3.6"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_crawl
+    restart: on-failure
+    networks:
+      - crawl
+    expose:
+      - "${REDIS_HOST_PORT}"
+    volumes:
+      - ${REDIS_LOG_DIR}:/var/log/redis/:rw
+
+networks:
+  crawl:
