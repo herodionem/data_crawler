@@ -1,0 +1,6 @@
+flask
+psycopg2
+redis
+boto3
+bs4
+requests

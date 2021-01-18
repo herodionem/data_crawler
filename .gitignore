@@ -1,0 +1,7 @@
+docker/log/
+**/.env
+**/.DS_Store
+**/__pycache__/
+**/*.pyc
+**/.vscode/
+docker/volumes/postgres/data

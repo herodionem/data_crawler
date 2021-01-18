@@ -14,10 +14,10 @@ services:
       - ${REDIS_LOG_DIR}:/var/log/redis/:rw
   postgres:
     image: crawl_psql
-    hostname: ${POSTGRES_DB_HOST}
     build:
       context: ./postgres
       dockerfile: Dockerfile
+    hostname: ${POSTGRES_DB_HOST}
     restart: on-failure
     volumes:
       - ./volumes/postgres/data:/var/lib/postgresql/data
@@ -32,11 +32,10 @@ services:
       - POSTGRES_HOST=${POSTGRES_DB_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
   py_scheduler:
-    image: python:latest
+    image: py_crawl
     build:
-      context: ./py_scheduler
-      dockerfile:
-      args:
+      context: ./py_dock
+      dockerfile: Dockerfile
     restart: on-failure
     hostname: scheduler.crawl
     ports:
@@ -46,7 +45,7 @@ services:
       - POSTGRES_HOST=${POSTGRES_DB_HOST}
       - POSTGRES_DB=${POSTGRES_DEFAULT_DB}
       - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
       - AWS_REGION=${AWS_REGION}
@@ -54,19 +53,24 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
-      - LOG_FOLDER=${PYTHON_LOG_FILEPATH}
       - MAIL_HOST=${MAIL_HOST}
       - MAIL_PORT=${MAIL_PORT}
       - MAIL_FROM=${MAIL_FROM}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - MAIL_USERNAME=${MAIL_USERNAME}
+      - LOG_CONTEXT=scheduler
+      - LOG_FOLDER=${PYTHON_LOG_FILEPATH}
     volumes:
-      - ./log/scheduler:/var/www/data_crawler/log
+      - ./log/scheduler:${PYTHON_LOG_FILEPATH}scheduler
+      - ./log/worker:${PYTHON_LOG_FILEPATH}worker
+      - ../app:/var/www/data_crawler/app
+      - ../scheduler.py:/var/www/data_crawler/scheduler.py
     networks:
       - crawl
     depends_on:
       - redis
       - postgres
+    command: "python scheduler.py"
 
 networks:
   crawl:
