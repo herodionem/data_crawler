@@ -5,4 +5,4 @@ docker/log/
 **/*.pyc
 **/.vscode/
 docker/volumes/postgres/data
-special_file.txt
+special_file.json

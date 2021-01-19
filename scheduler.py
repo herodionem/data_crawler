@@ -108,7 +108,7 @@ while True:
 
     # log.debug(os.path.isfile('./app/special_file.txt'))
     # log.debug(check_special_file)
-    if not os.path.isfile('./app/special_file.txt') and check_special_file:
+    if not os.path.isfile('./app/special_file.json') and check_special_file:
         jobs_submitted = r.xread({'crawl_stream':'0'})
         jobs_pending = r.xreadgroup('crawlers', 'crawler1', {'crawl_stream': '0'})
         cur.execute('select count(*) from crawl_schedule')
@@ -121,7 +121,7 @@ while True:
             cols = [i.name for i in cur.description]
             analysis = dict(cur.fetchall())
             if analysis:
-                with open('./app/special_file.txt', 'w') as sfile:
+                with open('./app/special_file.json', 'w') as sfile:
                     sfile.write(json.dumps(dict(sorted(analysis.items(), key=lambda x: x[0]))))
                 check_special_files = False
                 log.info('Special File Created :D')
