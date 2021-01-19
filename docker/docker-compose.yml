@@ -3,9 +3,6 @@ version: "3.6"
 services:
   redis:
     image: redis:latest
-    build:
-      context: ./redis
-      dockerfile: Dockerfile
     container_name: redis_crawl
     hostname: ${REDIS_HOST}
     restart: always
@@ -76,6 +73,45 @@ services:
       - redis
       - postgres
     command: "python scheduler.py"
+  py_crawler:
+    image: py_crawl
+    build:
+      context: ./py_dock
+      dockerfile: Dockerfile
+    restart: always
+    hostname: crawler.crawl
+    expose:
+      - "80"
+    environment:
+      - POSTGRES_HOST=${POSTGRES_DB_HOST}
+      - POSTGRES_DB=${POSTGRES_DEFAULT_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_FROM=${MAIL_FROM}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - LOG_CONTEXT=worker
+      - LOG_FOLDER=${PYTHON_LOG_FILEPATH}
+    volumes:
+      - ./log/scheduler:${PYTHON_LOG_FILEPATH}scheduler
+      - ./log/worker:${PYTHON_LOG_FILEPATH}worker
+      - ../app:/var/www/data_crawler/app
+      - ../worker.py:/var/www/data_crawler/worker.py
+    networks:
+      - crawl
+    depends_on:
+      - redis
+      - postgres
+    command: "python worker.py"
 
 networks:
   crawl:

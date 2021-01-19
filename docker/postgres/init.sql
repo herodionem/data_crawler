@@ -3,7 +3,7 @@
 create schema if not exists archive;
 
 create table if not exists manifest_log (
-    id bigserial,
+    id bigserial primary key,
     filename text,
     status smallint,
     attempts smallint,
@@ -12,7 +12,7 @@ create table if not exists manifest_log (
 );
 
 create table if not exists crawl_schedule (
-    id bigserial,
+    id bigserial primary key,
     service text,
     url text,
     headers text,
@@ -39,4 +39,16 @@ create table if not exists archive.crawl_log (
     created_at timestamp,
     first_attempted timestamp,
     completed_at timestamp
+);
+
+create table if not exists crawl_results (
+    id serial primary key,
+    url text,
+    response text
+);
+
+create table if not exists analyze (
+    id serial primary key,
+    word text,
+    opt bool
 );
