@@ -3,9 +3,12 @@ version: "3.6"
 services:
   redis:
     image: redis:latest
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
     container_name: redis_crawl
     hostname: ${REDIS_HOST}
-    restart: on-failure
+    restart: always
     networks:
       - crawl
     expose:
@@ -18,13 +21,15 @@ services:
       context: ./postgres
       dockerfile: Dockerfile
     hostname: ${POSTGRES_DB_HOST}
-    restart: on-failure
+    restart: always
     volumes:
       - ./volumes/postgres/data:/var/lib/postgresql/data
     networks:
       - crawl
     expose:
       - ${POSTGRES_PORT}
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_DB=${POSTGRES_DEFAULT_DB}
       - POSTGRES_USER=${POSTGRES_USERNAME}
@@ -36,7 +41,7 @@ services:
     build:
       context: ./py_dock
       dockerfile: Dockerfile
-    restart: on-failure
+    restart: always
     hostname: scheduler.crawl
     ports:
       - 80:80

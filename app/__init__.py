@@ -54,6 +54,12 @@ conn, cur = get_postgres_conn(ret_cur=True)
 s3 = get_s3_client()
 r = get_redis_cursor()
 
+for group in ['crawlers', 'parsers']:
+    try:
+        r.xgroup_create('crawl_stream', group, '0', True)
+    except Exception as e:
+        log.info(e)
+
 
 __all__ = [
     'log',

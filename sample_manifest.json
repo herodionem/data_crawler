@@ -1,0 +1,10 @@
+[
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/10","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/9","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/8","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/7","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/6","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/5","version":"1","count":10,"interval":60,"duration":300,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/4","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null},
+    {"service":"aggregator","url":"https://crawler-api-test-7safzythua-uw.a.run.app/store-a/3","version":"1","count":1,"interval":0,"duration":null,"headers":null,"cookies":null}
+]
