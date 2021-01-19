@@ -3,8 +3,10 @@ import time
 from datetime import timedelta
 from datetime import datetime
 import json
+import os
 
 
+check_special_file = True
 check_manifest = True
 check_manifest_interval = timedelta(minutes=1)
 check_manifest_time = datetime.now()
@@ -103,5 +105,25 @@ while True:
         r.xadd('crawl_stream', sanitize_redis_inputs(j))
     log.info(f'Added {len(jobs)} jobs to the crawl stream')
     conn.commit()
+
+    # log.debug(os.path.isfile('./app/special_file.txt'))
+    # log.debug(check_special_file)
+    if not os.path.isfile('./app/special_file.txt') and check_special_file:
+        jobs_submitted = r.xread({'crawl_stream':'0'})
+        jobs_pending = r.xreadgroup('crawlers', 'crawler1', {'crawl_stream': '0'})
+        cur.execute('select count(*) from crawl_schedule')
+        has_rows = cur.fetchall()[0][0]
+        cur.execute('select count(*) from crawl_schedule where status = 0')
+        not_complete = cur.fetchall()[0][0]
+        log.info(f"Jobs Submitted: {len(jobs_submitted[0][1])} Submitted Jobs: {has_rows} Unscheduled Jobs: {not_complete}")
+        if len(jobs_submitted[0][1]) > 0 and len(jobs_pending[0][1]) == 0 and has_rows > 1 and not_complete == 0:
+            cur.execute('select right(word, 1) as letter, count(*) from analyze_words group by letter')
+            cols = [i.name for i in cur.description]
+            analysis = dict(cur.fetchall())
+            if analysis:
+                with open('./app/special_file.txt', 'w') as sfile:
+                    sfile.write(json.dumps(dict(sorted(analysis.items(), key=lambda x: x[0]))))
+                check_special_files = False
+                log.info('Special File Created :D')
 
     time.sleep(30)

@@ -28,7 +28,7 @@ REDIS_PORT = os.getenv('REDIS_PORT', 6379)
 
 
 def get_postgres_conn(host=POSTGRES_HOST, port=POSTGRES_PORT, user=POSTGRES_USER, password=POSTGRES_PASSWORD, dbname=POSTGRES_DB, ret_cur=False):
-    log.info(f'Establishing DB connection with host={host}, port={port}, user={user}, password={password}, dbname={dbname}')
+    log.info(f'Establishing DB connection with host={host}, port={port}, dbname={dbname}')
     conn = psycopg2.connect(host=host, port=port, user=user, password=password, dbname=dbname)
     if ret_cur:
         return conn, conn.cursor()

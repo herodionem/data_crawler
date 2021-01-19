@@ -1,4 +1,4 @@
-\connect public
+\connect public;
 
 create schema if not exists archive;
 
@@ -47,7 +47,7 @@ create table if not exists crawl_results (
     response text
 );
 
-create table if not exists analyze (
+create table if not exists analyze_words (
     id serial primary key,
     word text,
     opt bool
