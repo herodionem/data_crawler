@@ -110,13 +110,18 @@ while True:
     # log.debug(check_special_file)
     if not os.path.isfile('./app/special_file.json') and check_special_file:
         jobs_submitted = r.xread({'crawl_stream':'0'})
+        try:
+            read_redis = jobs_submitted[0][1]
+        except:
+            read_redis = [['empty result', []]]
+            log.warning(f"Use xread more reliably... {jobs_submitted}")
         jobs_pending = r.xreadgroup('crawlers', 'crawler1', {'crawl_stream': '0'})
         cur.execute('select count(*) from crawl_schedule')
         has_rows = cur.fetchall()[0][0]
         cur.execute('select count(*) from crawl_schedule where status = 0')
         not_complete = cur.fetchall()[0][0]
-        log.info(f"Jobs Submitted: {len(jobs_submitted[0][1])} Submitted Jobs: {has_rows} Unscheduled Jobs: {not_complete}")
-        if len(jobs_submitted[0][1]) > 0 and len(jobs_pending[0][1]) == 0 and has_rows > 1 and not_complete == 0:
+        log.info(f"Jobs Submitted: {len(read_redis[0][1])} Submitted Jobs: {has_rows} Unscheduled Jobs: {not_complete}")
+        if len(read_redis[0][1]) > 0 and len(jobs_pending[0][1]) == 0 and has_rows > 1 and not_complete == 0:
             cur.execute('select right(word, 1) as letter, count(*) from analyze_words group by letter')
             cols = [i.name for i in cur.description]
             analysis = dict(cur.fetchall())
