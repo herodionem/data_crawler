@@ -34,11 +34,11 @@ print(dpmt_msg.substitute(DEPARTMENTS='\n\t'+'\n\t'.join(departments)+'\n\n'))
 # # session.proxies.update({'https':'https://1.192.122.208:8908'})
 # r = session.get(url)
 # r.html.render(sleep=2, keep_page=True, scrolldown=1)
-import lxml.html
 import os
 import time
 from io import StringIO
 
+import lxml.html
 from splinter import Browser
 """
 Download the `chromedriver` from here:

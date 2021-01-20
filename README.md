@@ -75,7 +75,7 @@ Instructions:
 
 3) Make sure you have the right libraries:
 ```
-    pip install splinter faker requests bs4
+    pip install splinter faker requests bs4 lxml
 ```
 
 4) and run:
@@ -84,3 +84,24 @@ Instructions:
 ```
 
 Another thing to note, I developed this using Python 3.6.9
+
+During all this, I would like to have stuck to using
+    - requests
+    - lxml
+    - cchardet
+`lxml` has typically outperformed `BeautifulSoup` when it comes to speed, and
+using `requests` *streams* in concert with `lxml` and enhancements from `cchardet`,
+request and parsing speeds can be increased in excess of 10x from what I've read.
+Obviously, at scale, we would also want to be using asynchronous requests, depending
+on our skill and restrictions.
+
+#2.1 took me about 20-30 minutes. #2.2, on the other hand took a bit longer as Wal-
+Mart has some serious coverage on the free proxy lists out there, as well as their
+bot-detection capabilities, which necessitated (at least in my case), the use of an
+automated browser. When necessarily used in production, the browser would be executed
+in headless mode and regular screenshots, as well as html shots (in general) would
+be taken for analysis.
+
+I tried a few different new libraries before just settling back on `splinter`. It's
+ease of use and reliability has further solidified it as my personal favorite browser
+automation tool.
