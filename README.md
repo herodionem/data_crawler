@@ -1,11 +1,13 @@
 # data_crawler
 
-A Data Crawler Demo!
+## A Data Crawler Demo!
 
 This application will consist of a collection of microservices which, when tied together, will A) gather some data from an API and do some arbitrary processing on them and B) find links on a website and do something with them, like store them for later, or something...
 
 At this point, things are pretty ugly. The logging could use some work, and code readability was, put kindly, a bit of an afterthought.
 
+
+### Challenge 1:
 
 Technologies Used:
 - Python
@@ -52,3 +54,33 @@ when logging workers, I also might prefer to have each worker log their own file
 
 Long term, S3 objects would also be compressed.
 
+
+### Challenge 2:
+
+Instructions:
+
+1) Download the `chromedriver` from here:
+
+    https://sites.google.com/a/chromium.org/chromedriver/downloads
+
+    and extract the downloaded folder. Be sure to download a driver that is compatible
+    with your current version of Chrome!
+    If you are using a different browser, download the right driver, and follow the
+    same steps. If it's not chrome, you'll need to enter a different name.
+    Splinter plays pretty nice with chrome and firefox.
+
+2) Copy the filepath to the *directory* where the `chromedriver` executable was extracted to
+    and paste it in the `website_crawler.py` file located in the root directory of this repo,
+    assinging it to the variable ``chromedriver_dir``
+
+3) Make sure you have the right libraries:
+```
+    pip install splinter faker requests bs4
+```
+
+4) and run:
+```
+    python website_crawler.py
+```
+
+Another thing to note, I developed this using Python 3.6.9

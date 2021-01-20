@@ -1,4 +1,6 @@
+##########################################
 # Web-Crawler Challenge #2.1
+##########################################
 import re
 from string import Template
 
@@ -21,8 +23,9 @@ departments = [i['href'] for i in soup.find_all('a', {'href': pattern}) if len(i
 
 print(dpmt_msg.substitute(DEPARTMENTS='\n\t'+'\n\t'.join(departments)+'\n\n'))
 
-
+##########################################
 # Web-Crawler Challenge #2.2
+##########################################
 
 # from requests_html import HTMLSession
 # session = HTMLSession()
@@ -31,13 +34,12 @@ print(dpmt_msg.substitute(DEPARTMENTS='\n\t'+'\n\t'.join(departments)+'\n\n'))
 # # session.proxies.update({'https':'https://1.192.122.208:8908'})
 # r = session.get(url)
 # r.html.render(sleep=2, keep_page=True, scrolldown=1)
-from splinter import Browser
-import os
 import lxml.html
-from io import StringIO
+import os
 import time
+from io import StringIO
 
-
+from splinter import Browser
 """
 Download the `chromedriver` from here:
 
@@ -49,9 +51,11 @@ If you are using a different browser, download the right driver, and follow the
 same steps. If it's not chrome, you'll need to enter a different name.
 Splinter plays pretty nice with chrome and firefox.
 
-Copy the filepath to the *directory* where the `chromedriver` executable was extracted to
+Copy the filepath to the *directory* where the `chromedriver_dir` executable was extracted to
 and paste it below, assinging it to the variable ``chromedriver_dir``
 """
+
+
 chromedriver_dir = '/home/jtieken/Downloads/'
 os.environ['PATH'] = os.environ['PATH'] + ":" + chromedriver_dir
 
